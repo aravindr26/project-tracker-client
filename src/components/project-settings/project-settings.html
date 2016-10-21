@@ -1,0 +1,141 @@
+<div class="container project-settings-container">
+    <div class="row">
+        <div class="project-settings-section-header">
+            <h3 class="project-st-title">Project Details</h3>
+        </div>
+        <div>
+            <form #projectData="ngForm" (ngSubmit)="updateProjectData(projectData.value)">
+                <table class="project-st-general">
+                    <tr class="project-st-row">
+                        <td class="project-st-input-td">
+                            <input type="text" class="form-control" name="projectName" [(ngModel)]="projectName" placeholder="Project Name">
+                        </td>
+                    </tr>
+                    <tr class="project-st-row">
+                        <td class="project-st-input-td">
+                            <textarea class="form-control" name="projectDescription" [(ngModel)]="projectDescription" placeholder="Project Description">
+
+                            </textarea>
+                        </td>
+                    </tr>
+                    <tr class="projects-st-action">
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-primary"> Update Details </button>
+                            <button class="btn btn-default"> cancel </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="project-settings-section-header">
+            <h3 class="project-st-title">Project Settings</h3>
+        </div>
+        <div>
+            <form #projectSettings="ngForm" (ngSubmit)="saveProjectSettings(projectSettings.value)">
+                <table class="project-st-general">
+                    <tr class="project-st-row">
+                        <td>
+                            <label class="control-label" for="registration-date">Project Start Date:</label>
+                        </td>
+                        <td>
+                            <div class="input-group registration-date-time">
+                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
+                                <input class="form-control" name="startDate" [(ngModel)]="startDate" id="registration-date" type="date">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="project-st-row">
+                        <td>
+                            <label class="control-label" for="registration-date">Project End Date:</label>
+                        </td>
+                        <td>
+                            <div class="input-group registration-date-time">
+                                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
+                                <input class="form-control" name="endDate" [(ngModel)]="endDate" id="registration-date" type="date">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr class="project-st-row">
+                        <td>
+                            <label class="control-label" for="registration-date"> Sprint Starts On:</label>
+                        </td>
+                        <td>
+                            <select class="form-control" [(ngModel)] = "projectSprintDay" name="projectSprintDay">
+                                <option value="1">Sunday</option>
+                                <option value="2">Monday</option>
+                                <option value="3">Tuesday</option>
+                                <option value="4">Wednesday</option>
+                                <option value="5">Thursday</option>
+                                <option value="6">Friday</option>
+                                <option value="7">Saturday</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr class="project-st-row">
+                        <td>
+                            <label class="control-label" for="registration-date"> Sprint Duration (Days):</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="projectSprintDuration" [(ngModel)]="projectSprintDuration">
+                        </td>
+                    </tr>
+                    <tr class="projects-st-action">
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-primary"> Save Settings </button>
+                            <button class="btn btn-default"> Cancel </button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="project-settings-section-header">
+            <h3 class="project-st-title">Story Settings</h3>
+        </div>
+        <div>
+            <form #saveType="ngForm" (ngSubmit)="saveStoryType(saveType.value)">
+                <table class="project-st-general">
+                    <tr class="project-st-row">
+                        <td>
+                            <label class="control-label" for="registration-date"> Story Types:</label>
+                        </td>
+                        <td>
+                            <input class="form-control" name="story_type" [ngModel]="story_type">
+                        </td>
+                    </tr>
+                    <tr class="projects-st-action">
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-primary"> Add Story Type </button>
+                            <button class="btn btn-default"> Cancel </button>
+                        </td>
+                    </tr>
+                    <tr class="project-st-row">
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div>
+            <form #saveStatus="ngForm" (ngSubmit)="saveStoryStatus(saveStatus.value)">
+                <table class="project-st-general">
+                    <tr class="project-st-row">
+                        <td>
+                            <label class="control-label" for="registration-date"> Story Status:</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="story_status" [ngModel]="story_status">
+                        </td>
+                    </tr>
+                    <tr class="projects-st-action">
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-primary"> Add Story Status </button>
+                            <button class="btn btn-default"> Cancel </button>
+                        </td>
+                    </tr>
+                    <tr class="project-st-row">
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

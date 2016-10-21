@@ -1,0 +1,14 @@
+.project-dashboard-title h3{
+    color: #f14444;
+    text-align: left !important;
+}
+.project-dashboard-container {
+    margin-top: 56px !important;
+}
+.task-summary-container {
+    margin-top: 15px;
+    width: 49% !important;
+}
+.projects-container {
+    margin-top: 20px;
+}

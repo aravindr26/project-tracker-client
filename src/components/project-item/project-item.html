@@ -1,0 +1,26 @@
+<div class="col-md-4 project-item-container">
+    <div class="project-name">
+        <span><a [routerLink]="['/tasks-home', projectList.project_id]">
+            {{projectList.project_name}}
+        </a></span>
+    </div>
+    <div class="project-description">
+          <span>
+              {{projectList.project_description}}
+          </span>
+    </div>
+    <div>
+          <span class="glyphicon-container">
+              <a [routerLink]="['/project-members', projectList.project_id]"><i class="custom-glyphicon glyphicon glyphicon-user"></i> 10</a>
+          </span>
+          <span class="glyphicon-container">
+              <i class="custom-glyphicon glyphicon glyphicon-star"></i> 5/25
+          </span>
+        <span class="glyphicon-container">
+              <i class="custom-glyphicon glyphicon glyphicon-tasks"></i> 2/17
+          </span>
+          <span class="glyphicon-container">
+              <a [routerLink]="['/project-settings', projectList.project_id]"><i class="custom-glyphicon glyphicon glyphicon-cog"></i></a>
+          </span>
+    </div>
+</div>

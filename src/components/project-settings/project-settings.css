@@ -1,0 +1,27 @@
+.project-settings-container {
+    margin-top: 60px;
+}
+.project-settings-section-header {
+    border-bottom: 2px #777 solid;
+}
+.project-st-general {
+    margin: 0 auto;
+    margin-top: 10px;
+    width: 50%;
+}
+.project-st-row {
+    height: 40px;
+}
+.project-st-input-td {
+
+}
+.project-st-title {
+    text-align: left !important;
+}
+
+.projects-st-action {
+    text-align: center;
+}
+.projects-st-action td {
+    padding-top: 10px;
+}

@@ -1,0 +1,35 @@
+.project-item-container {
+    -ms-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    padding: 10px 20px;
+    background-color: white;
+    margin-top: 10px;
+}
+.project-section-header {
+    color: #1b6d85;
+    padding: 10px 20px;
+}
+.project-section-title {
+    display: inline-block;
+    font-size: 24px;
+}
+.project-add-button {
+    display: inline-block;
+    line-height: 19px;
+    cursor: pointer;
+    color: #000;
+}
+.add-project-fields {
+    margin: 0 auto 5px;
+    width: 65%;
+}
+.addProjectModal {
+    overflow-y: hidden !important;
+}
+
+.project-show-all {
+    text-align: right;
+    cursor: pointer;
+}

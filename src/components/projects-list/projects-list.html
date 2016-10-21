@@ -1,0 +1,40 @@
+<div class="row project-section-header">
+    <span class="project-section-title col-md-8">Projects Working on</span>
+    <span class="col-md-3 project-show-all">Show All Projects</span>
+    <span class="col-md-1 project-add-button" data-toggle="modal" data-target="#addProject">
+        <i class="glyphicon glyphicon-plus"></i>
+    </span>
+</div>
+<div class="project-list-container" *ngFor="let project of projectDetails">
+   <pt-project-item [projectList] = "project"></pt-project-item>
+</div>
+
+<!-- Modal -->
+<div class="modal fade addProjectModal" id="addProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add Project</h4>
+            </div>
+            <div class="modal-body">
+                <form #addProjectData="ngForm" (ngSubmit)="addProject(addProjectData.value)">
+                    <div class="input-group add-project-fields">
+                        <input type="text" name="projectName" [ngModel]="projectName" required="required" class="form-control" placeholder="Project Name">
+                    </div>
+                    <div class="input-group add-project-fields">
+                        <textarea type="text" name="projectDescription" [ngModel]="projectDescription" required="required" class="form-control" placeholder="Project Description">
+                        </textarea>
+                    </div>
+                    <div class="input-group add-project-fields">
+                        <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Save changes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+                <div ngClass="{{alertMessageClass}}" class="alert" ngif="projectStatus && projectStatus.status" role="alert">
+                    {{ statusMessage }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

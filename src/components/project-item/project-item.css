@@ -1,0 +1,20 @@
+.project-name {
+    color: #f14444;
+    padding: 0 0 5px;
+    font-size: 16px;
+}
+.custom-glyphicon {
+    color: #f14444 !important;
+}
+.glyphicon-container {
+    display: inline-block;
+    padding-right: 8px;
+}
+.project-description {
+    padding-bottom: 10px;
+}
+.project-item-container {
+    margin-right: 17px;
+    width: 32% !important;
+    display: inline-block !important;
+}

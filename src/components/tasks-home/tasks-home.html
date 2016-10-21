@@ -1,0 +1,316 @@
+<div class="pt-tasks-home-container">
+    <div class="pt-tasks-nav col-md-2">
+        <ul class="pt-tasks-nav-list">
+            <li class="pt-tasks-create-story">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addStoryModal">
+                    Create Story
+                </button></li>
+            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'myTask'" (click)="loadSelectedNav('myTask')">
+                <i class="glyphicon glyphicon-th-list"></i>
+                My Tasks
+            </li>
+            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'completedTask'" (click)="loadSelectedNav('completedTask')">
+                <i class="glyphicon glyphicon-th-list"></i>
+                Completed
+            </li>
+            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'currentTask'" (click)="loadSelectedNav('currentTask')">
+                <i class="glyphicon glyphicon-th-list"></i>
+                Current
+            </li>
+            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'backLog'" (click)="loadSelectedNav('backLog')">
+                <i class="glyphicon glyphicon-th"></i>
+                Backlog
+            </li>
+            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'blockedTask'" (click)="loadSelectedNav('blockedTask')">
+                <i class="glyphicon glyphicon-eye-close"></i>
+                Blocked Stories
+            </li>
+            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'team'" (click)="loadSelectedNav('team')">
+                <i class="glyphicon glyphicon-user"></i>
+                Team
+            </li>
+            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'settings'" (click)="loadSelectedNav('settings')">
+                <i class="glyphicon glyphicon-cog"></i>
+                Settings
+            </li>
+        </ul>
+    </div>
+    <section class="pt-tasks-list col-md-4">
+        <div class="pt-task-list-header">
+            <span> Current </span>
+        </div>
+        <div class="pt-tasks-item" *ngFor="let story of storyData; let i=index"
+            (click)="buildStoryDetailsView(story, i)"
+            [class.is-active]="i === selectedStory">
+            <div class="pt-task-item-left-section">
+                <div class="pt-task-item-top">
+                    <span class="pt-tasks-item-id"> #{{story.story_id}} </span>
+                    <span class="pt-task-item-header">- {{story.story_summery}} </span>
+                    <span>(Started)</span>
+                </div>
+                <div>
+                    <span>Owner(s): </span><span>{{story.user_detail.firstName}}</span>
+                </div>
+            </div>
+            <div pt-task-item-right-section>
+                <input type="checkbox">
+            </div>
+        </div>
+    </section>
+    <section class="pt-tasks-details col-md-6">
+        <section class="pt-task-details-header">
+            <span class="pt-task-details-id">
+                #{{data.story_id}} -
+            </span>
+            <span class="pt-tasks-details-heading">
+                {{data.story_summery}}
+            </span>
+            <span>
+                <i class="glyphicon glyphicon-edit">
+
+                </i>
+            </span>
+        </section>
+        <section class="pt-tasks-action-items">
+            <span class="pt-tasks-details-action-items">
+                <i class="glyphicon glyphicon-share-alt"></i>
+            </span>
+            <span class="pt-tasks-details-action-items">
+                 <i class="glyphicon glyphicon-copy"></i>
+            </span>
+            <span class="pt-tasks-details-action-items">
+                <i class="glyphicon glyphicon-save"></i>
+            </span>
+            <span class="pt-tasks-details-action-items">
+                <i class="glyphicon glyphicon-trash"></i>
+            </span>
+            <span class="pt-tasks-details-action-items">
+                Is Blocked: <input type="checkbox">
+            </span>
+        </section>
+        <div class="details-ruler">
+            Details
+        </div>
+        <section class="pt-tasks-details-info">
+            <div class="pt-tasks-ac">
+                <textarea class="pt-tasks-ac-details" placeholder="Description" value="{{data.story_description}}">
+
+                </textarea>
+            </div>
+            <div class="pt-tasks-status">
+                <table class="pt-task-details-table">
+                    <tbody>
+                    <tr>
+                        <td>Story Type: </td>
+                        <td class="pt-tasks-select-box">
+                            <select class="form-control" [(ngModel)]="data.story_type">
+                                <option value="1">Bug</option>
+                                <option value="2">Feature</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Effort: </td>
+                        <td class="pt-tasks-select-box">
+                            <select class="form-control" [(ngModel)]="data.story_point">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Requester: </td>
+                        <td>Aravind</td>
+                    </tr>
+                    <tr>
+                        <td>Assignee: </td>
+                        <td>{{data.user_detail.firstName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Status: </td>
+                        <td class="pt-tasks-select-box">
+                            <select class="form-control" #selectedStatus [(ngModel)]="data.story_status" (change)="updateStoryStatus(selectedStatus.value, data.story_id)">
+                                <option value="1">Unstarted</option>
+                                <option value="2">In Progress</option>
+                                <option value="3">Done</option>
+                                <option value="4">Delivered</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Notify Me: </td>
+                        <td><input type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td> Created At: </td>
+                        <td>{{data.createdAt}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+        <section style="margin-bottom: 15px;">
+            <span>
+                <button class="btn btn-primary">Confirm</button>
+            </span>
+            <span>
+                <button class="btn btn-default">Cancel</button>
+            </span>
+        </section>
+        <div class="details-ruler label-container">
+            <span>Labels</span>
+            <span><input type="text" #labelText class="labelInput form-control" [(ngModel)]="clearLabelText"></span>
+            <span><i class="glyphicon glyphicon-plus label-add" (click)="addLabel(labelText.value, data.story_id)"></i></span>
+        </div>
+        <section class="pt-tasks-details-label-section">
+          <span class="story-label-item" *ngFor="let label of storyLabelList">{{label.story_label}}</span>
+        </section>
+        <div class="details-ruler">
+            Attachments
+        </div>
+        <section class="pt-tasks-details-attachment-section">
+            <div class="pt-tasks-attachment-input">
+                <i class="glyphicon glyphicon-cloud-upload"></i> Drop file to attach or Browse
+                <input type="file" class="form-control">
+            </div>
+        </section>
+        <div class="details-ruler">
+            Comments
+        </div>
+        <section class="pt-task-details-comments">
+            <div class="pt-tasks-details-comment-list">
+                <div class="pt-tasks-details-comment-item" *ngFor="let comment of commentsList">
+                    <div class="pt-tasks-comment-details col-xs-12">
+                        <span class="pt-task-comment-added-by col-xs-4">{{comment.user_detail.firstName}}</span>
+                        <span class="pt-tasks-comment-added-at col-xs-4"> {{getFormattedDate(comment.createdAt)}}</span>
+                        <span class="pt-tasks-comment-reply col-xs-4"> <i class="glyphicon glyphicon-share-alt"></i></span>
+                    </div>
+                    <div class="pt-tasks-comment">
+                        {{comment.story_comment}}
+                    </div>
+                </div>
+            </div>
+            <div class="pt-tasks-comment-box">
+                <textarea class="pt-tasks-comment-input" #comment [(ngModel)]="storyComment" placeholder="Comments"></textarea>
+            </div>
+            <div>
+                <span>
+                    <button class="btn btn-primary"  (click)="addComment(comment.value, data.story_id)">Add</button>
+                </span>
+                <span>
+                    <button class="btn btn-danger">Cancel</button>
+                </span>
+            </div>
+        </section>
+    </section>
+</div>
+
+<!-- Add Story Modal -->
+
+<div class="modal fade bs-example-modal-lg addStoryModal" id="addStoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add Story</h4>
+            </div>
+            <div class="modal-body">
+                <form #addStory="ngForm" (ngSubmit)="addStoryData(addStory.value)">
+                    <table class="pt-story-add-table">
+                        <tr>
+                            <td>Project</td>
+                            <td>Sample</td>
+                        </tr>
+                        <tr>
+                            <td>Issue Type</td>
+                            <td>
+                                <select class="form-control" name="storyType" [ngModel]="storyDetails.storyType">
+                                    <option [value]="1">Bug</option>
+                                    <option [value]="2">Feature</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Title
+                            </td>
+                            <td><input name="storySummery" [ngModel]="storyDetails.storySummery" class="pt-add-task-summary" type="text" placeholder="Summary"></td>
+                        </tr>
+                        <tr>
+                            <td>Priority</td>
+                            <td>
+                                <select class="form-control" name="storyPriority" [ngModel]="storyDetails.storyPriority">
+                                    <option [value]="1">1</option>
+                                    <option [value]="2">2</option>
+                                    <option [value]="3">3</option>
+                                    <option [value]="4">4</option>
+                                    <option [value]="5">5</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Effort</td>
+                            <td>
+                                <select class="form-control" name="storyPoint" [ngModel]="storyDetails.storyPoint">
+                                    <option [value]="0">0</option>
+                                    <option [value]="1">1</option>
+                                    <option [value]="2">2</option>
+                                    <option [value]="3">3</option>
+                                    <option [value]="4">4</option>
+                                    <option [value]="5">5</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Assignee</td>
+                            <td>
+                                <select class="form-control" name="storyAssignee" [ngModel]="storyDetails.storyAssignee">
+                                    <option *ngFor="let member of memberList" value="{{member.userId}}">
+                                    {{member.firstName}}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Description
+                            </td>
+                            <td>
+                                <textarea name="storyDescription" [ngModel]="storyDetails.storyDescription" class="pt-add-story-description" placeholder="Description"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Attachment</td>
+                            <td>
+                                <input  ngControl="storyAttachment" type="file">
+                            </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          </td>
+                          <td>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                          </td>
+                        </tr>
+                    </table>
+                    <!--<div class="input-group add-member-fields">
+                        <input type="text" id="projectMemberEmail" ngControl="projectMemberEmail" required="required" class="form-control" placeholder="Email Id">
+                    </div>
+                    <div class="input-group add-member-fields">
+                        <input type="text" id="projectMemberRole" ngControl="projectMemberRole" required="required" class="form-control" placeholder="Role">
+                    </div>-->
+                </form>
+                <div class="alert alert-success" ngif="projectStatus && projectStatus.status" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>

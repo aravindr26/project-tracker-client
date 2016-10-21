@@ -1,0 +1,10 @@
+.task-list-container {
+    background-color: white;
+    margin-top: 10px;
+}
+.task-section-header {
+    background-color: #607d8b;
+    color: #fff;
+    padding: 10px 20px;
+}
+

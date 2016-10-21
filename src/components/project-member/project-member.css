@@ -1,0 +1,21 @@
+.project-member-container {
+    margin-top: 60px;
+}
+.project-member-table {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.project-member-toolbar {
+    margin-left: 10px;
+    margin-right: 10px;
+    min-height: 20px;
+}
+.add-member-fields {
+    margin: 0 auto 5px;
+    width: 65%;
+    border: none !important;
+}
+.addMemberModal {
+    overflow-y: hidden !important;
+}

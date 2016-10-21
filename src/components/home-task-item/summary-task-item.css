@@ -1,0 +1,9 @@
+.panel-default>.panel-heading {
+    background-color: #fff !important;
+}
+.panel {
+    border-radius: 0px !important;
+}
+.glyphicon-chevron-right {
+    color: #f14444 !important;
+}
