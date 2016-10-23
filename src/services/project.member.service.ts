@@ -14,7 +14,8 @@ export class ProjectMemberService {
     private projectMemberBaseURL ="http://localhost:3002/projectMember/";
     private authToken = this.storageService.getData('authToken');
     public headers = new Headers(
-        { 'Content-Type': 'application/json',
+        { 
+          'Content-Type': 'application/json',
           'Authorization': this.authToken
         });
     public options = new RequestOptions({ headers: this.headers });
@@ -24,6 +25,7 @@ export class ProjectMemberService {
             'Authorization': this.authToken
         });
     public optionsGet = new RequestOptions({ headers: this.headersGet });
+    
 
     constructor(private http:Http,
                 private storageService: StorageService) {}
@@ -39,9 +41,18 @@ export class ProjectMemberService {
           .catch(this.handleError);
     }
 
+    exportmemberData(project_id) {
+        return this.http.post(this.projectMemberBaseURL + 'exportMemberData', project_id, this.options)
+        .map(this.extractCSV)
+        .catch(this.handleError);
+    }
+
+    extractCSV(res: Response) {
+     return res;
+    }
+
     private extractData(res: Response) {
         let body = res.json();
-        console.log('body data--<<>>', body);
         return body || { };
     }
 

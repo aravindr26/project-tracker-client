@@ -9,6 +9,7 @@ import {ProjectMemberService} from "../../services/project.member.service";
 import {StorageService} from '../../services/storage.service';
 import { MemberList } from '../../models/MemberList';
 import { MemberInfo } from '../../models/MemberInfo';
+import { FileExport } from '../../services/file.export';
 
 @Component({
     selector: 'pt-project-members',
@@ -17,7 +18,7 @@ import { MemberInfo } from '../../models/MemberInfo';
     styles: [
         require('./project-member.css').toString()
     ],
-    providers: [ProjectMemberService, StorageService]
+    providers: [ProjectMemberService, StorageService, FileExport]
 })
 
 export class ProjectMembers implements OnInit{
@@ -28,8 +29,10 @@ export class ProjectMembers implements OnInit{
     private memberList: MemberList;
     private addMemberData: MemberInfo;
     private params: any;
+    private exportMemberData:any;
     constructor(private memberService: ProjectMemberService,
-                private activatedRoute: ActivatedRoute ) {}
+                private activatedRoute: ActivatedRoute,
+                private fileExport: FileExport) {}
     ngOnInit() {
         this.addMemberData = {
             projectMemberEmail: '',
@@ -67,5 +70,19 @@ export class ProjectMembers implements OnInit{
                 },
                 error=> this.errorMessage = error
         )
+    }
+
+    exportMemberList() {
+      var projectData = {
+           "project_id":this.project_id
+      };
+      this.memberService.exportmemberData(JSON.stringify(projectData))
+      .subscribe(
+         exportData =>{
+           this.exportMemberData = exportData;
+           this.fileExport.exportFile(exportData._body, 'member-data.csv');
+         },
+         error=> this.errorMessage = error
+      )
     }
 }
