@@ -41,6 +41,12 @@ export class ProjectMemberService {
           .catch(this.handleError);
     }
 
+    deleteMember(member_id, project_id) {
+        return this.http.delete(this.projectMemberBaseURL + 'deleteMemberById?member_id=' + member_id + '&project_id='+project_id, this.options)
+        .map(this.extractData)
+        .catch(this.handleError);
+    }
+
     exportmemberData(project_id) {
         return this.http.post(this.projectMemberBaseURL + 'exportMemberData', project_id, this.options)
         .map(this.extractCSV)

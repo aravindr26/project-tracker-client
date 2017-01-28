@@ -22,6 +22,7 @@ export class ProjectService {
      * Authentication token
      * **/
     private authToken = this.storageService.getData('authToken');
+    private userId = this.storageService.getData('userId');
 
     /**
      * Headers for POST and GET calls
@@ -46,7 +47,7 @@ export class ProjectService {
     }
 
     getTopProjects(): Observable <ProjectDetails> {
-        return this.http.get(this.projectHttpURL + 'fetchTopProjects', this.optionsGet)
+        return this.http.get(this.projectHttpURL + 'fetchTopProjects?user_id='+ this.userId, this.optionsGet)
             .map(this.extractData)
             .catch(this.handleError);
     }
@@ -74,6 +75,12 @@ export class ProjectService {
         return this.http.get(this.projectHttpURL + 'fetchProjectSettings?project_id=' + projectId, this.optionsGet)
             .map(this.extractData)
             .catch(this.handleError);
+    }
+
+    deleteProject(project_id) {
+        return this.http.delete(this.projectHttpURL + 'deleteProjectById?project_id=' + project_id, this.options)
+        .map(this.extractData)
+        .catch(this.handleError);
     }
 
     private extractData(res: Response) {

@@ -38,6 +38,10 @@
 .pt-task-list-header {
     min-height: 40px;
     background-color: #607d8b;
+    color: #fff;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 2%;
 }
 .pt-tasks-item-id {
 }
@@ -203,4 +207,35 @@
     border-radius: 5px;
     font-size: 11px;
     font-weight: 700;
+}
+.pt-task-status-container {
+    display: inline-block;
+    float: right;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.pt-task-status-progress {
+background-color: dodgerblue;
+}
+
+.pt-task-status-done {
+background-color: darkorange;
+}
+
+.pt-task-status-delivered {
+background-color: green;
+}
+
+.pt-task-status-unstarted {
+  background-color: gray;
+}
+
+.pt-task-label-indicator {
+    color: green;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 3px; 
 }

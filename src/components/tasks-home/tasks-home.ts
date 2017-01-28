@@ -11,6 +11,7 @@ import { Story } from '../../models/Story';
 import {ActivatedRoute} from "@angular/router";
 import { MemberList } from '../../models/MemberList';
 import {ProjectMemberService} from "../../services/project.member.service";
+import { FileExport } from '../../services/file.export';
 
 @Component({
     selector: 'pt-tasks-home',
@@ -19,7 +20,7 @@ import {ProjectMemberService} from "../../services/project.member.service";
     styles: [
         require('./tasks-home.css').toString()
     ],
-    providers: [StoryService, StorageService, ProjectMemberService]
+    providers: [StoryService, StorageService, ProjectMemberService, FileExport]
 })
 
 export class TasksHomeComponent implements OnInit{
@@ -42,10 +43,18 @@ export class TasksHomeComponent implements OnInit{
     private storyLabelData: any;
     private storyLabelList: any;
     private clearLabelText: string;
+    private storyID: string;
+    private deleteMessage: string;
+    private deleteStatus: boolean = false;
+    private alertMessageClass: string;
+    private taskCategory:string;
+    private storyFocus: boolean;
+    private storyDescription: string;
     constructor(private storyService: StoryService,
                 private activatedRoute: ActivatedRoute,
                 private memberService: ProjectMemberService,
-                private router: Router) {}
+                private router: Router,
+                private fileExport: FileExport) {}
     ngOnInit() {
         this.storyDetails = {
             storySummery: '',
@@ -73,9 +82,19 @@ export class TasksHomeComponent implements OnInit{
         this.selectedNav = 'myTask';
         this.clearLabelText ='';
         this.storyComment ='';
+        this.taskCategory = "Current";
+        this.storyFocus = true;
         this.getURLParam();
         this.getMemberList();
         this.getAllStories();
+    }
+
+    onStoryDescriptionFocus() {
+      this.storyFocus = false;
+    }
+
+    onStoryDescriptionBlur() {
+      this.storyFocus = true;
     }
 
     getURLParam() {
@@ -103,6 +122,7 @@ export class TasksHomeComponent implements OnInit{
             .subscribe(
                 storyInfo => {
                     this.storyData = storyInfo.StoryList;
+                    console.log('story_info----', storyInfo);
                     if(this.storyData && this.storyData.length) {
                         console.log('this.storyData----',this.storyData);
                         this.buildStoryDetailsView(this.storyData[0], 0);
@@ -114,6 +134,8 @@ export class TasksHomeComponent implements OnInit{
             )
     }
 
+    private addStoryMessageClass: string;
+    private addStoryMessage: string;
     addStoryData(storyInfo) {
         storyInfo.projectId = this.project_id;
         let StoryData = JSON.stringify(storyInfo);
@@ -121,15 +143,37 @@ export class TasksHomeComponent implements OnInit{
             .subscribe(
                 addStoryRes => {
                     this.storyRes = addStoryRes;
+                    this.addStoryMessageClass = this.storyRes.status ? 'alert-success': '';
+                    this.addStoryMessage = "Task has been added successfully";
+                    this.getURLParam();
+                    this.getMemberList();
                     this.getAllStories();
                 },
                 error => this.errorMessage = error
             )
     }
 
+    private updatedDescription: string;
+    updateStoryDescription() {
+        var data = {
+          story_description: this.storyDescription,
+          story_id: this.storyID
+        };
+        this.storyService.updateStoryDescription(JSON.stringify(data))
+        .subscribe(
+            updatedData =>{
+                this.updatedDescription = updatedData;
+                this.storyFocus = true;
+            }
+        )
+    }
+    cancelUpdateRequest() {
+        this.storyFocus = true;
+    }
+
     buildStoryDetailsView(data, selectedIndex) {
-        console.log('story data---', data);
         this.selectedStory = selectedIndex;
+        this.storyID = data.story_id;
         this.data = {
             story_id: data.story_id,
             story_summery: data.story_summery,
@@ -177,12 +221,12 @@ export class TasksHomeComponent implements OnInit{
     }
 
     getCompletedTasks() {
+        this.taskCategory = "Completed";
         this.storyService.getStoryByStatus(this.project_id, [4])
             .subscribe(
                 completedTasks=> {
                     this.storyData = completedTasks.StoryList;
                     if(this.storyData && this.storyData.length) {
-                        console.log('this.storyData----',this.storyData);
                         this.buildStoryDetailsView(this.storyData[0], 0);
                     } else {
                         this.noStoryString = "No stories are available";
@@ -193,11 +237,11 @@ export class TasksHomeComponent implements OnInit{
     }
 
     getCurrentTasks() {
+         this.taskCategory = "Current";
         this.storyService.getStoryByStatus(this.project_id, [2, 3])
             .subscribe(
                 currentTasks=> {
                     this.storyData = currentTasks.StoryList;
-                    console.log('this.storyData----',this.storyData);
                     if(this.storyData && this.storyData.length) {
                         this.buildStoryDetailsView(this.storyData[0], 0);
                     } else {
@@ -208,13 +252,18 @@ export class TasksHomeComponent implements OnInit{
             )
     }
 
+    getStoryStatusByIndex(index) {
+     var statusList=['', 'Unstarted', 'In Progress', 'Done', 'Delivered'];
+     return statusList[index];
+    }
+
     getBackLogTasks() {
+        this.taskCategory = "Backlog";
         this.storyService.getStoryByStatus(this.project_id, [1])
             .subscribe(
                 backLogTasks=> {
                     this.storyData = backLogTasks.StoryList;
                     if(this.storyData && this.storyData.length) {
-                        console.log('this.storyData----',this.storyData);
                         this.buildStoryDetailsView(this.storyData[0], 0);
                     } else {
                         this.noStoryString = "No stories are available";
@@ -271,9 +320,21 @@ export class TasksHomeComponent implements OnInit{
                 storyComment=>{
                     this.storyCommentData = storyComment;
                     this.getCommentsByStory(storyId);
+                    this.storyComment = null;
                 },
                 error=> this.errorMessage = error
             )
+    }
+
+    private deleteCommentStatus: boolean;
+    deleteComment(comment_id, storyId) {
+     this.storyService.deleteCommentById(comment_id)
+     .subscribe(
+         deleteComment => {
+             this.deleteCommentStatus = deleteComment.status;
+             this.getCommentsByStory(storyId);
+         }
+     )
     }
 
     getCommentsByStory(storyId) {
@@ -281,7 +342,6 @@ export class TasksHomeComponent implements OnInit{
             .subscribe(
                 commentList=> {
                     this.commentsList = commentList.commentsList;
-                    console.log('comments list----',this.commentsList);
                 },
                 error=> this.errorMessage =error
             )
@@ -301,10 +361,27 @@ export class TasksHomeComponent implements OnInit{
                 storyLabel=> {
                     this.storyLabelData = storyLabel;
                     this.getLabelByStory(storyId);
+                    this.getURLParam();
+                    this.getMemberList();
+                    this.getAllStories();
                     this.clearLabelText = '';
                 },
                 error=> this.errorMessage = error
             )
+    }
+
+    private labelDeleteStatus: boolean;
+    removeLabel(labelId, storyId) {
+        this.storyService.deleteLabelById(labelId).
+        subscribe(
+            deleteLabel => {
+                this.labelDeleteStatus = deleteLabel.status;
+                this.getLabelByStory(storyId);
+                this.getURLParam();
+                    this.getMemberList();
+                    this.getAllStories();
+            }
+        )
     }
 
     getLabelByStory(storyId) {
@@ -315,5 +392,34 @@ export class TasksHomeComponent implements OnInit{
                 },
                 error=> this.errorMessage =error
             )
+    }
+
+    exportStoryDetails() {
+      var storyData = {
+          story_id: this.storyID
+      };
+      this.storyService.exportStoryDetails(JSON.stringify(storyData))
+      .subscribe(
+          exportData =>{
+           //this.exportStoryData = exportData;
+           this.fileExport.exportFile(exportData._body, 'story-info.csv')
+          },
+          error=> this.errorMessage =error
+      )
+    }
+
+    deleteStory() {
+    this.storyService.deleteStoryById(this.storyID)
+    .subscribe(
+        deleteData => {
+         this.deleteMessage = deleteData.message
+         this.deleteStatus = true;
+         this.alertMessageClass = this.deleteStatus ? 'alert-success': '';
+         this.getURLParam();
+         this.getMemberList();
+         this.getAllStories();
+        },
+        error => this.errorMessage = error
+    )
     }
 }

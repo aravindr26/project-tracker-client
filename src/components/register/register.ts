@@ -5,6 +5,7 @@
 import { Component } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
+import { StorageService} from '../../services/storage.service';
 import { User } from '../../models/user';
 
 @Component({
@@ -14,7 +15,7 @@ import { User } from '../../models/user';
     styles: [
         require('./register.css').toString()
     ],
-    providers: [AuthenticationService]
+    providers: [AuthenticationService, StorageService]
 })
 
 export class RegisterComponent{

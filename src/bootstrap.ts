@@ -11,7 +11,8 @@ import {
 
 import { FormsModule }   from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { ChartModule } from 'angular2-highcharts';
+import '../node_modules/chart.js/dist/Chart.bundle.min.js';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 import { AppComponent }  from './app/app.component';
 import { LoginComponent } from './components/login/login';
@@ -27,13 +28,15 @@ import {ProjectSettings} from "./components/project-settings/project-settings";
 import {ProjectListComponent} from "./components/projects-list/projects-list";
 import {TasksHomeComponent} from "./components/tasks-home/tasks-home";
 import {UserTasksStatus} from './components/tasks-overall-status/user-tasks-status';
+import {UserProfile} from './components/user-profile/user-profile';
+import { AccountRecovery } from "./components/account-recovery/account-recovery";
 
 @NgModule({
     imports:      [ BrowserModule,
         FormsModule,
         routing,
         HttpModule,
-        ChartModule
+        ChartsModule
     ],
     declarations: [ AppComponent,
         HeaderComponent,
@@ -49,7 +52,9 @@ import {UserTasksStatus} from './components/tasks-overall-status/user-tasks-stat
         ForgotPassword,
         RegisterComponent,
         ProjectsHomeComponent,
-        UserTasksStatus
+        UserTasksStatus,
+        UserProfile,
+        AccountRecovery
     ],
     providers: [
         appRoutingProviders,

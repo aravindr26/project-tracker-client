@@ -62,7 +62,6 @@ export class StoryService {
      * Update story status
      * **/
     updateStoryStatus(data) {
-        console.log("data======", data);
       return this.http.post(this.projectHttpURL + 'updateStoryStatus', data, this.options)
           .map(this.extractData)
           .catch(this.handleError);
@@ -144,6 +143,49 @@ export class StoryService {
         return this.http.post(this.projectHttpURL + 'saveStoryStatus', status, this.options)
             .map(this.extractData)
             .catch(this.handleError);
+    }
+
+    /**
+     * Export story details
+     * **/
+    exportStoryDetails(storyData) {
+        return this.http.post(this.projectHttpURL + 'exportStoryInfo', storyData, this.options)
+        .map(this.extractCSV)
+        .catch(this.handleError);
+    }
+
+    extractCSV(res: Response) {
+     return res;
+    }
+
+    deleteStoryById(story_id) {
+        return this.http.delete(this.projectHttpURL + 'deleteStoryById?story_id='+ story_id, this.options)
+        .map(this.extractData)
+        .catch(this.handleError);
+    }
+
+    deleteCommentById(comment_id) {
+        return this.http.delete(this.projectHttpURL + 'deleteCommentById?comment_id='+ comment_id, this.options)
+        .map(this.extractData)
+        .catch(this.handleError);
+    }
+
+    deleteLabelById(label_id) {
+        return this.http.delete(this.projectHttpURL + 'deleteLabelById?label_id='+ label_id, this.options)
+        .map(this.extractData)
+        .catch(this.handleError);
+    }
+
+    updateStoryDescription(storyData) {
+       return this.http.post(this.projectHttpURL + 'updateStoryDescription', storyData, this.options)
+       .map(this.extractData)
+       .catch(this.handleError);
+    }
+
+    getStoryCount() {
+      return this.http.get(this.projectHttpURL + 'getTaskCount?user_id=' + this.userId, this.optionsGet)
+      .map(this.extractData)
+      .catch(this.handleError);
     }
 
     /**

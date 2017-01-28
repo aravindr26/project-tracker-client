@@ -35,6 +35,9 @@ export class LoginComponent implements OnInit{
         email: '',
         password: ''
       };
+      if(this.storageService.getData('authToken')) {
+        this.router.navigate(['/projects-home']);
+      }
     }
 
     userLogin(userData: UserLogin) {

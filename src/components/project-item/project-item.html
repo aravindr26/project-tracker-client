@@ -11,16 +11,21 @@
     </div>
     <div>
           <span class="glyphicon-container">
-              <a [routerLink]="['/project-members', projectList.project_id]"><i class="custom-glyphicon glyphicon glyphicon-user"></i> 10</a>
+              <a [routerLink]="['/project-members', projectList.project_id]"><i class="custom-glyphicon glyphicon glyphicon-user"></i>
+              {{projectList.project_member_details.length}}
+              </a>
           </span>
           <span class="glyphicon-container">
-              <i class="custom-glyphicon glyphicon glyphicon-star"></i> 5/25
+              <i class="custom-glyphicon glyphicon glyphicon-star"></i> {{projectList.featureCount}}
           </span>
-        <span class="glyphicon-container">
-              <i class="custom-glyphicon glyphicon glyphicon-tasks"></i> 2/17
+          <span class="glyphicon-container">
+              <i class="custom-glyphicon glyphicon glyphicon-tasks"></i> {{projectList.bugCount}}
           </span>
           <span class="glyphicon-container">
               <a [routerLink]="['/project-settings', projectList.project_id]"><i class="custom-glyphicon glyphicon glyphicon-cog"></i></a>
+          </span>
+          <span class="glyphicon-container" (click)="deleteProject(projectList.project_id)">
+              <i class="custom-glyphicon glyphicon glyphicon-trash"></i>
           </span>
     </div>
 </div>

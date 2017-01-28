@@ -38,6 +38,7 @@ export class ProjectMembers implements OnInit{
             projectMemberEmail: '',
             projectMemberRole: ''
         };
+        this.memberStatus = false;
         this.getURLParam();
         this.getProjectMembers();
     }
@@ -59,6 +60,9 @@ export class ProjectMembers implements OnInit{
                 }
             );
     }
+
+    private addMemberMessage:string;
+    private alertMessageClass:string;
     addProjectMember(member) {
         member.project_id = this.project_id;
         let memberDetails = JSON.stringify(member);
@@ -66,7 +70,11 @@ export class ProjectMembers implements OnInit{
         this.memberService.addMember(memberDetails).
             subscribe(
                 memberData=>{
-                    this.memberStatus = memberData;
+                    this.memberStatus = memberData.status;
+                    this.addMemberMessage = memberData.message;
+                    this.alertMessageClass = this.memberStatus ? 'alert-success': '';
+                    this.getURLParam();
+                    this.getProjectMembers();
                 },
                 error=> this.errorMessage = error
         )
@@ -84,5 +92,17 @@ export class ProjectMembers implements OnInit{
          },
          error=> this.errorMessage = error
       )
+    }
+
+    private deleteStatus:string;
+    deleteMember(memberId){
+        this.memberService.deleteMember(memberId, this.project_id)
+        .subscribe(
+            memberData =>{
+                this.deleteStatus = memberData;
+                this.getURLParam();
+                this.getProjectMembers();
+            }
+        )
     }
 }

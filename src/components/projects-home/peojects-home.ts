@@ -1,7 +1,7 @@
 /**
  * Created by aravind on 3/9/16.
  */
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 
@@ -15,4 +15,5 @@ import { StorageService } from '../../services/storage.service';
     providers: [StorageService]
 })
 
-export class ProjectsHomeComponent {}
+export class ProjectsHomeComponent{
+}

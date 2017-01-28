@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit{
                 private router: Router) {}
     ngOnInit() {
         this.userName = this.storageService.getData('userName');
+        console.log('userName---', this.userName);
     }
 
     logout() {

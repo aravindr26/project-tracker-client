@@ -1,10 +1,10 @@
 <div class="row">
   <div class="register-section">
     <div class="registration-form-section">
-      <form #registrationForm="ngForm" (ngSubmit)="userRegistration(registrationForm.value)">
+      <form #registrationForm="ngForm" (ngSubmit)="userRegistration(registrationForm.value); registrationForm.reset()">
         <div class="section-title reg-header animated fadeInDown" data-animation="fadeInDown">
-          <h3>Get your Account Here </h3>
-          <h1>{{message}}</h1>
+          <h3 style="text-align: center">Get your Account Here </h3>
+          <span style="color: green; font-size: 14px;">{{message}}</span>
         </div>
         <div class="clearfix">
           <div class="col-sm-6 registration-left-section animated fadeInUp" data-animation="fadeInUp">
@@ -12,19 +12,19 @@
               <div class="textbox-wrap">
                 <div class="input-group">
                   <span class="input-group-addon "><i class="glyphicon glyphicon-user"></i></span>
-                  <input type="text" id="firstName" ngControl="firstName" class="form-control " placeholder="FirstName" required="required">
+                  <input type="text" name="firstName" [ngModel]="firstName" class="form-control " placeholder="FirstName" required="required">
                 </div>
               </div>
               <div class="textbox-wrap">
                 <div class="input-group">
                   <span class="input-group-addon "><i class="glyphicon glyphicon-user"></i></span>
-                  <input type="text" id="lastName" ngControl="lastName" class="form-control " placeholder="LastName" required="required">
+                  <input type="text" name="lastName" [ngModel]="lastName" class="form-control " placeholder="LastName" required="required">
                 </div>
               </div>
               <div class="textbox-wrap">
                 <div class="input-group">
                   <span class="input-group-addon "><i class="glyphicon glyphicon-envelope"></i></span>
-                  <input type="email" id="email" ngControl="email" class="form-control " placeholder="Email Id" required="required">
+                  <input type="email" name="email" [ngModel]="email" class="form-control " placeholder="Email Id" required="required">
                 </div>
               </div>
 
@@ -36,19 +36,19 @@
               <div class="textbox-wrap">
                 <div class="input-group">
                   <span class="input-group-addon "><i class="glyphicon glyphicon-user"></i></span>
-                  <input type="number" id="phoneNumber" ngControl="phoneNumber" class="form-control " placeholder="Phone Number" required="required">
+                  <input type="number" name="phoneNumber" [ngModel]="phoneNumber" class="form-control " placeholder="Phone Number" required="required">
                 </div>
               </div>
               <div class="textbox-wrap">
                 <div class="input-group">
                   <span class="input-group-addon "><i class="glyphicon glyphicon-lock"></i></span>
-                  <input type="password" id="password" ngControl="password" class="form-control " placeholder="Password" required="required">
+                  <input type="password" name="password" [ngModel]="password" class="form-control " placeholder="Password" required="required">
                 </div>
               </div>
               <div class="textbox-wrap">
                 <div class="input-group">
                   <span class="input-group-addon "><i class="glyphicon glyphicon-lock"></i></span>
-                  <input type="password" id="confirmPassword" ngControl="confirmPassword" class="form-control " placeholder="Confirm-Password" required="required">
+                  <input type="password" name="confirmPassword" [ngModel]="confirmPassword" class="form-control " placeholder="Confirm-Password" required="required">
                 </div>
               </div>
 

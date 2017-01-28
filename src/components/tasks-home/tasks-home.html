@@ -5,6 +5,10 @@
                 <button class="btn btn-primary" data-toggle="modal" data-target="#addStoryModal">
                     Create Story
                 </button></li>
+            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'backLog'" (click)="loadSelectedNav('backLog')">
+                <i class="glyphicon glyphicon-th"></i>
+                Backlog
+            </li>
             <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'myTask'" (click)="loadSelectedNav('myTask')">
                 <i class="glyphicon glyphicon-th-list"></i>
                 My Tasks
@@ -17,14 +21,10 @@
                 <i class="glyphicon glyphicon-th-list"></i>
                 Current
             </li>
-            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'backLog'" (click)="loadSelectedNav('backLog')">
-                <i class="glyphicon glyphicon-th"></i>
-                Backlog
-            </li>
-            <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'blockedTask'" (click)="loadSelectedNav('blockedTask')">
+            <!--<li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'blockedTask'" (click)="loadSelectedNav('blockedTask')">
                 <i class="glyphicon glyphicon-eye-close"></i>
                 Blocked Stories
-            </li>
+            </li> -->
             <li class="pt-tasks-nav-items" [class.selected-nav]="selectedNav === 'team'" (click)="loadSelectedNav('team')">
                 <i class="glyphicon glyphicon-user"></i>
                 Team
@@ -37,7 +37,7 @@
     </div>
     <section class="pt-tasks-list col-md-4">
         <div class="pt-task-list-header">
-            <span> Current </span>
+            <span> {{taskCategory}} </span>
         </div>
         <div class="pt-tasks-item" *ngFor="let story of storyData; let i=index"
             (click)="buildStoryDetailsView(story, i)"
@@ -46,15 +46,21 @@
                 <div class="pt-task-item-top">
                     <span class="pt-tasks-item-id"> #{{story.story_id}} </span>
                     <span class="pt-task-item-header">- {{story.story_summery}} </span>
-                    <span>(Started)</span>
+                    <span>({{story.user_detail.firstName}})</span>
+                    <span class="pt-task-status-container"
+                    [ngClass]="{'pt-task-status-progress':story.story_status === '2','pt-task-status-done': story.story_status === '3','pt-task-status-delivered':story.story_status === '4','pt-task-status-unstarted':story.story_status === '1' }">
+                        {{getStoryStatusByIndex(story.story_status)}}
+                    </span>
                 </div>
                 <div>
-                    <span>Owner(s): </span><span>{{story.user_detail.firstName}}</span>
+                    <span *ngFor="let label of story.story_labels" class="pt-task-label-indicator">
+                      {{label.story_label}}
+                    </span>
                 </div>
             </div>
-            <div pt-task-item-right-section>
+            <!--<div pt-task-item-right-section>
                 <input type="checkbox">
-            </div>
+            </div> -->
         </div>
     </section>
     <section class="pt-tasks-details col-md-6">
@@ -72,28 +78,23 @@
             </span>
         </section>
         <section class="pt-tasks-action-items">
-            <span class="pt-tasks-details-action-items">
-                <i class="glyphicon glyphicon-share-alt"></i>
-            </span>
-            <span class="pt-tasks-details-action-items">
-                 <i class="glyphicon glyphicon-copy"></i>
-            </span>
-            <span class="pt-tasks-details-action-items">
+            <span class="pt-tasks-details-action-items" (click)="exportStoryDetails()">
                 <i class="glyphicon glyphicon-save"></i>
             </span>
-            <span class="pt-tasks-details-action-items">
+            <span class="pt-tasks-details-action-items" data-toggle="modal" data-target="#deleteStory">
                 <i class="glyphicon glyphicon-trash"></i>
             </span>
-            <span class="pt-tasks-details-action-items">
+            <!--<span class="pt-tasks-details-action-items">
                 Is Blocked: <input type="checkbox">
-            </span>
+            </span>-->
         </section>
         <div class="details-ruler">
             Details
         </div>
         <section class="pt-tasks-details-info">
             <div class="pt-tasks-ac">
-                <textarea class="pt-tasks-ac-details" placeholder="Description" value="{{data.story_description}}">
+                <textarea class="pt-tasks-ac-details" placeholder="Description" [(ngModel)] = "storyDescription"
+                value="{{data.story_description}}" (focus)="onStoryDescriptionFocus()">
 
                 </textarea>
             </div>
@@ -141,10 +142,10 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
+                   <!-- <tr>
                         <td>Notify Me: </td>
                         <td><input type="checkbox"></td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td> Created At: </td>
                         <td>{{data.createdAt}}</td>
@@ -156,10 +157,10 @@
         </section>
         <section style="margin-bottom: 15px;">
             <span>
-                <button class="btn btn-primary">Confirm</button>
+                <button class="btn btn-primary" [disabled]="storyFocus" (click)="updateStoryDescription()">Confirm</button>
             </span>
             <span>
-                <button class="btn btn-default">Cancel</button>
+                <button class="btn btn-default" [disabled]="storyFocus" (click)="cancelUpdateRequest()">Cancel</button>
             </span>
         </section>
         <div class="details-ruler label-container">
@@ -168,7 +169,10 @@
             <span><i class="glyphicon glyphicon-plus label-add" (click)="addLabel(labelText.value, data.story_id)"></i></span>
         </div>
         <section class="pt-tasks-details-label-section">
-          <span class="story-label-item" *ngFor="let label of storyLabelList">{{label.story_label}}</span>
+          <span class="story-label-item" *ngFor="let label of storyLabelList">
+              {{label.story_label}}
+              <i class="glyphicon glyphicon-remove" (click)="removeLabel(label.story_label_id, label.story_id)"></i>
+          </span>
         </section>
         <div class="details-ruler">
             Attachments
@@ -188,7 +192,9 @@
                     <div class="pt-tasks-comment-details col-xs-12">
                         <span class="pt-task-comment-added-by col-xs-4">{{comment.user_detail.firstName}}</span>
                         <span class="pt-tasks-comment-added-at col-xs-4"> {{getFormattedDate(comment.createdAt)}}</span>
-                        <span class="pt-tasks-comment-reply col-xs-4"> <i class="glyphicon glyphicon-share-alt"></i></span>
+                        <span class="pt-tasks-comment-reply col-xs-4"> 
+                            <i class="glyphicon glyphicon-trash" (click)="deleteComment(comment.story_comment_id, comment.story_id)"></i>
+                        </span>
                     </div>
                     <div class="pt-tasks-comment">
                         {{comment.story_comment}}
@@ -219,13 +225,16 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Add Story</h4>
             </div>
+            <div class="{{addStoryMessageClass}}" ngif="projectStatus && projectStatus.status" role="alert">
+                {{addStoryMessage}}
+                </div>
             <div class="modal-body">
                 <form #addStory="ngForm" (ngSubmit)="addStoryData(addStory.value)">
                     <table class="pt-story-add-table">
-                        <tr>
+                        <!--<tr>
                             <td>Project</td>
                             <td>Sample</td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <td>Issue Type</td>
                             <td>
@@ -306,7 +315,32 @@
                         <input type="text" id="projectMemberRole" ngControl="projectMemberRole" required="required" class="form-control" placeholder="Role">
                     </div>-->
                 </form>
-                <div class="alert alert-success" ngif="projectStatus && projectStatus.status" role="alert">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete story -->
+
+<div class="modal fade addMemberModal" id="deleteStory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Delete Story</h4>
+            </div>
+            <div class="modal-body">
+                <form #addMemberData="ngForm" (ngSubmit)="deleteStory()">
+                    <div style="margin: 10px;">
+                        Do you really want to delete it?
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <div ngClass="{{alertMessageClass}}" ngif="deleteStatus" role="alert">
+                    {{deleteMessage}}
                 </div>
             </div>
             <div class="modal-footer">
